@@ -8,7 +8,7 @@
     <ProjectGuid>{53BF15D7-7D40-4E2B-B2D8-B64722F90647}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WowXna.Xna</RootNamespace>
+    <RootNamespace>InjectedXna</RootNamespace>
     <AssemblyName>WowXna.Xna</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -48,8 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine.cs" />
-    <Compile Include="EngineServiceContainer.cs" />
+    <Compile Include="InjectedGame.cs" />
     <Compile Include="InjectedGraphicsDeviceManager.cs" />
     <Compile Include="InjectedGraphicsDeviceManager.Static.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

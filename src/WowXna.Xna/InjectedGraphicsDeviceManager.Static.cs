@@ -2,12 +2,11 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.InteropServices;
-
+using Microsoft.Xna.Framework.Graphics;
 using Extemory;
 using Extemory.MemoryEdits;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace WowXna.Xna
+namespace InjectedXna
 {
     public partial class InjectedGraphicsDeviceManager
     {

@@ -2,24 +2,24 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace WowXna.Xna
+namespace InjectedXna
 {
     public partial class InjectedGraphicsDeviceManager : IGraphicsDeviceManager, IGraphicsDeviceService, IDisposable
     {
-        private readonly Engine _engine;
+        private readonly InjectedGame _injectedGame;
         private GraphicsDevice _device;
 
-        public InjectedGraphicsDeviceManager(Engine engine)
+        public InjectedGraphicsDeviceManager(InjectedGame injectedGame)
         {
-            if (engine == null)
-                throw new ArgumentNullException("engine");
-            if (engine.Services.GetService(typeof(IGraphicsDeviceManager)) != null)
-                throw new ArgumentException("IGraphicsDeviceManager is already present in engine services", "engine");
+            if (injectedGame == null)
+                throw new ArgumentNullException("injectedGame");
+            if (injectedGame.Services.GetService(typeof(IGraphicsDeviceManager)) != null)
+                throw new ArgumentException("IGraphicsDeviceManager is already present in engine services", "injectedGame");
 
-            engine.Services.AddService(typeof (IGraphicsDeviceManager), this);
-            engine.Services.AddService(typeof (IGraphicsDeviceService), this);
+            injectedGame.Services.AddService(typeof (IGraphicsDeviceManager), this);
+            injectedGame.Services.AddService(typeof (IGraphicsDeviceService), this);
 
-            _engine = engine;
+            _injectedGame = injectedGame;
         }
 
         #region Implementation of IGraphicsDeviceManager

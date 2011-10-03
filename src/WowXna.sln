@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowXna.Content", "WowXna.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowXna.Core", "WowXna.Core\WowXna.Core.csproj", "{FB81D457-AA86-4056-B36E-79C972D73F16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowXna.Xna", "WowXna.Xna\WowXna.Xna.csproj", "{53BF15D7-7D40-4E2B-B2D8-B64722F90647}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InjectedXna", "WowXna.Xna\InjectedXna.csproj", "{53BF15D7-7D40-4E2B-B2D8-B64722F90647}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
