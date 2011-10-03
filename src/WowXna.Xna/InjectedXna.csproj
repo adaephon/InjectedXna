@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EndSceneEventArgs.cs" />
     <Compile Include="InjectedGame.cs" />
+    <Compile Include="InjectedGameTime.cs" />
     <Compile Include="InjectedGraphicsDeviceManager.cs" />
     <Compile Include="InjectedGraphicsDeviceManager.Static.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -23,6 +23,8 @@ namespace InjectedXna
         private static Detour<EndSceneDelegate> _endSceneDetour;
         private static Detour<ResetDelegate> _resetDetour;
 
+        public static event EventHandler<EndSceneEventArgs> EndScene;
+
         /// <summary>
         /// Hooks DirectX creation functions to intercept device creation to get the device pointer.
         /// Needs to be called on Process startup with process started suspended.
@@ -126,6 +128,9 @@ namespace InjectedXna
         private static IntPtr EndSceneHandler(IntPtr pDevice)
         {
             // TODO
+            var endScene = EndScene;
+            if (endScene != null)
+                endScene(null, new EndSceneEventArgs(pDevice));
 
             return (IntPtr) _endSceneDetour.CallOriginal(pDevice);
         }
