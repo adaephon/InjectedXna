@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowXna.Content", "WowXna.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowXna.Core", "WowXna.Core\WowXna.Core.csproj", "{FB81D457-AA86-4056-B36E-79C972D73F16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InjectedXna", "WowXna.Xna\InjectedXna.csproj", "{53BF15D7-7D40-4E2B-B2D8-B64722F90647}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InjectedXna", "InjectedXna\InjectedXna.csproj", "{53BF15D7-7D40-4E2B-B2D8-B64722F90647}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InjectedXna.Native", "InjectedXna.Native\InjectedXna.Native.vcxproj", "{22C075B3-D477-4AAB-97B2-2B23951A350E}"
 EndProject
