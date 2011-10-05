@@ -9,6 +9,6 @@ namespace InjectedXna
             DevicePointer = pDevice;
         }
 
-        protected IntPtr DevicePointer { get; private set; }
+        public IntPtr DevicePointer { get; private set; }
     }
 }

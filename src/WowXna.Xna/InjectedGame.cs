@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -14,6 +15,7 @@ namespace InjectedXna
         private AutoResetEvent _renderThreadInitializedEvent;
         private InjectedGameTime _gameTime;
         private TimeSpan _totalGameTime;
+        private StateBlock _renderStateBlock;
 
         public InjectedGame()
         {
@@ -51,6 +53,11 @@ namespace InjectedXna
             _renderThreadInitializedEvent.WaitOne();
         }
 
+        public void Tick()
+        {
+            throw new NotImplementedException();
+        }
+
         private void EndSceneFirstRun(object sender, EndSceneEventArgs e)
         {
             Initialize();
@@ -66,7 +73,27 @@ namespace InjectedXna
 
         private void EndScene(object sender, EndSceneEventArgs e)
         {
-            throw new NotImplementedException();
+            var captured = false;
+            int hr;
+            if (_renderStateBlock == null)
+                _renderStateBlock = new StateBlock(e.DevicePointer);
+            try
+            {
+                hr = _renderStateBlock.Capture();
+                Marshal.ThrowExceptionForHR(hr);
+                captured = true;
+
+                Tick();
+            }
+            finally
+            {
+                if (captured)
+                {
+                    hr = _renderStateBlock.Apply();
+                    Marshal.ThrowExceptionForHR(hr);
+                }
+
+            }
         }
 
         #region Protected Xna Game Implementation
