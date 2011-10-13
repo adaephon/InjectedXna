@@ -12,13 +12,20 @@ namespace InjectedXna
     {
         private IGraphicsDeviceService _graphicsDeviceService;
         private IGraphicsDeviceManager _graphicsDeviceManager;
-        private AutoResetEvent _renderThreadInitializedEvent;
-        private InjectedGameTime _gameTime;
+        private readonly AutoResetEvent _renderThreadInitializedEvent;
+        private readonly InjectedGameTime _gameTime;
         private TimeSpan _totalGameTime;
         private StateBlock _renderStateBlock;
+        private readonly InjectedGameClock _clock;
+        private TimeSpan _lastFrameElapsedGameTime;
 
         public InjectedGame()
         {
+            _clock = new InjectedGameClock();
+            _lastFrameElapsedGameTime = TimeSpan.Zero;
+            _renderThreadInitializedEvent = new AutoResetEvent(false);
+            _gameTime = new InjectedGameTime();
+            _totalGameTime = TimeSpan.Zero;
             Services = new GameServiceContainer();
             Content = new ContentManager(Services);
         }
@@ -55,7 +62,42 @@ namespace InjectedXna
 
         public void Tick()
         {
-            throw new NotImplementedException();
+            // TODO: handle ShouldExit
+            _clock.Step();
+            var elapsedAdjustedTime = _clock.ElapsedAdjustedTime;
+            if (elapsedAdjustedTime < TimeSpan.Zero)
+                elapsedAdjustedTime = TimeSpan.Zero;
+
+            // NOTE: always uses non-fixed timestep
+            try
+            {
+                _gameTime.ElapsedGameTime = _lastFrameElapsedGameTime = elapsedAdjustedTime;
+                _gameTime.TotalGameTime = _totalGameTime;
+                _gameTime.IsRunningSlowly = false;
+                Update(_gameTime);
+                // TODO: suppress draw
+            }
+            finally
+            {
+                _totalGameTime += elapsedAdjustedTime;
+            }
+
+            DrawFrame();
+        }
+
+        private void DrawFrame()
+        {
+            try
+            {
+                _gameTime.TotalGameTime = _totalGameTime;
+                _gameTime.ElapsedGameTime = _lastFrameElapsedGameTime;
+                _gameTime.IsRunningSlowly = false; // TODO - currently don't use the IsRunningSlowly stuff
+                Draw(_gameTime);
+            }
+            finally
+            {
+                _lastFrameElapsedGameTime = TimeSpan.Zero;
+            }
         }
 
         private void EndSceneFirstRun(object sender, EndSceneEventArgs e)
@@ -96,6 +138,42 @@ namespace InjectedXna
             }
         }
 
+        private void HookDeviceEvents()
+        {
+            _graphicsDeviceService = Services.GetService(typeof (IGraphicsDeviceService)) as IGraphicsDeviceService;
+            
+            if (_graphicsDeviceService == null) return;
+
+            _graphicsDeviceService.DeviceCreated += DeviceCreated;
+            _graphicsDeviceService.DeviceResetting += DeviceResetting;
+            _graphicsDeviceService.DeviceReset += DeviceReset;
+            _graphicsDeviceService.DeviceDisposing += DeviceDisposing;
+        }
+
+        private void DeviceDisposing(object sender, EventArgs e)
+        {
+            Content.Unload();
+            UnloadContent();
+        }
+
+        private void DeviceReset(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void DeviceResetting(object sender, EventArgs e)
+        {
+            if (_renderStateBlock == null) return;
+            
+            _renderStateBlock.Dispose();
+            _renderStateBlock = null;
+        }
+
+        private void DeviceCreated(object sender, EventArgs e)
+        {
+            LoadContent();
+        }
+
         #region Protected Xna Game Implementation
 
         protected virtual bool BeginDraw()
@@ -117,6 +195,9 @@ namespace InjectedXna
 
         protected virtual void Initialize()
         {
+            HookDeviceEvents();
+            if (_graphicsDeviceService != null && _graphicsDeviceService.GraphicsDevice != null)
+                LoadContent();
         }
 
         protected virtual void LoadContent()
@@ -144,7 +225,7 @@ namespace InjectedXna
 
         protected virtual void Dispose(bool disposing)
         {
-            
+            // TODO
         }
 
         #endregion

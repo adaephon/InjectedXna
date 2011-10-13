@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="EndSceneEventArgs.cs" />
     <Compile Include="InjectedGame.cs" />
+    <Compile Include="InjectedGameClock.cs" />
     <Compile Include="InjectedGameTime.cs" />
     <Compile Include="InjectedGraphicsDeviceManager.cs" />
     <Compile Include="InjectedGraphicsDeviceManager.Static.cs" />
