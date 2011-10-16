@@ -22,6 +22,38 @@ namespace InjectedXna
             _injectedGame = injectedGame;
         }
 
+        #region Event Handlers
+
+        protected virtual void OnDeviceCreated(object sender, EventArgs e)
+        {
+            var handler = DeviceCreated;
+            if (handler != null)
+                handler(sender, e);
+        }
+
+        protected virtual void OnDeviceDisposing(object sender, EventArgs e)
+        {
+            var handler = DeviceDisposing;
+            if (handler != null)
+                handler(sender, e);
+        }
+
+        protected virtual void OnDeviceReset(object sender, EventArgs e)
+        {
+            var handler = DeviceReset;
+            if (handler != null)
+                handler(sender, e);
+        }
+
+        protected virtual void OnDeviceResetting(object sender, EventArgs e)
+        {
+            var handler = DeviceResetting;
+            if (handler != null)
+                handler(sender, e);
+        }
+
+        #endregion
+
         #region Implementation of IGraphicsDeviceManager
 
         /// <summary>
@@ -30,7 +62,15 @@ namespace InjectedXna
         public void CreateDevice()
         {
             if (_device != null) return;
-            throw new NotImplementedException();
+            var dev = GetXnaDevice();
+            if (dev == null)
+                throw new NoSuitableGraphicsDeviceException(
+                    "No graphics device has yet been created. There is no suitable XNA Graphics Device to use.");
+            _device = dev;
+            _device.DeviceResetting += OnDeviceResetting;
+            _device.DeviceReset += OnDeviceReset;
+            _device.Disposing += OnDeviceDisposing;
+            OnDeviceCreated(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -82,7 +122,14 @@ namespace InjectedXna
 
         protected void Dispose(bool disposing)
         {
-            throw new NotImplementedException();
+            if (disposing)
+            {
+                if (_injectedGame != null)
+                {
+                    if (_injectedGame.Services.GetService(typeof(IGraphicsDeviceService)) == this)
+                        _injectedGame.Services.RemoveService(typeof(IGraphicsDeviceService));
+                }
+            }
         }
 
         #endregion

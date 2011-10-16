@@ -60,6 +60,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InjectedXna\InjectedXna.csproj">
+      <Project>{53BF15D7-7D40-4E2B-B2D8-B64722F90647}</Project>
+      <Name>InjectedXna</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WowXna.Core\WowXna.Core.csproj">
       <Project>{FB81D457-AA86-4056-B36E-79C972D73F16}</Project>
       <Name>WowXna.Core</Name>

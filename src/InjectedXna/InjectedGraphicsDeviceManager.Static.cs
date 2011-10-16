@@ -24,6 +24,7 @@ namespace InjectedXna
         private static Detour<ResetDelegate> _resetDetour;
 
         public static event EventHandler<EndSceneEventArgs> EndScene;
+        public static event EventHandler<EventArgs> XnaDeviceCreated;
 
         /// <summary>
         /// Hooks DirectX creation functions to intercept device creation to get the device pointer.
@@ -99,7 +100,7 @@ namespace InjectedXna
                             .DetourWith(ResetFunc);
                     }
                     // TODO
-                    //OnCreateDevice();
+                    OnCreateDevice();
                     ret = 0;
                 }
                 catch (Exception)
@@ -123,6 +124,13 @@ namespace InjectedXna
                     _preservedBehaviorFlags, pPresentationParameters, ppReturnedDeviceInterface);
             }
             return ret;
+        }
+
+        private static void OnCreateDevice()
+        {
+            var handler = XnaDeviceCreated;
+            if (handler != null)
+                handler(null, EventArgs.Empty);
         }
 
         private static IntPtr EndSceneHandler(IntPtr pDevice)
@@ -281,6 +289,11 @@ namespace InjectedXna
         }
 
         #endregion
+
+        private static GraphicsDevice GetXnaDevice()
+        {
+            return _xnaGraphicsDevice;
+        }
     }
 
     public static class IDirect3D9VTable

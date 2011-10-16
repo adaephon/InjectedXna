@@ -96,6 +96,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InjectedXna\InjectedXna.csproj">
+      <Project>{53BF15D7-7D40-4E2B-B2D8-B64722F90647}</Project>
+      <Name>InjectedXna</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WowXna.Content\WowXna.Content.contentproj">
       <Project>{3BF986DB-AE84-4F6B-8BBB-9AE36FE92F59}</Project>
       <Name>WowXna.Content</Name>
