@@ -13,7 +13,7 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
-    <XnaProfile>HiDef</XnaProfile>
+    <XnaProfile>Reach</XnaProfile>
     <XnaCrossPlatformGroupID>e1aec4cf-093c-4084-a4b9-aa4dfc0b766e</XnaCrossPlatformGroupID>
     <XnaOutputType>Library</XnaOutputType>
   </PropertyGroup>
@@ -93,7 +93,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core.cs" />
+    <Compile Include="CubePrimitive.cs" />
+    <Compile Include="GeometricPrimitive.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VertexPositionNormal.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InjectedXna\InjectedXna.csproj">
