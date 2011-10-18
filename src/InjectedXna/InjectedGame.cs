@@ -13,7 +13,7 @@ namespace InjectedXna
         private IGraphicsDeviceService _graphicsDeviceService;
         private IGraphicsDeviceManager _graphicsDeviceManager;
         private readonly AutoResetEvent _renderThreadInitializedEvent;
-        private readonly InjectedGameTime _gameTime;
+        private readonly GameTime _gameTime;
         private TimeSpan _totalGameTime;
         private StateBlock _renderStateBlock;
         private readonly InjectedGameClock _clock;
@@ -71,9 +71,10 @@ namespace InjectedXna
             // NOTE: always uses non-fixed timestep
             try
             {
-                _gameTime.ElapsedGameTime = _lastFrameElapsedGameTime = elapsedAdjustedTime;
-                _gameTime.TotalGameTime = _totalGameTime;
-                _gameTime.IsRunningSlowly = false;
+                _lastFrameElapsedGameTime = elapsedAdjustedTime;
+                _gameTime.SetElapsedGameTime(_lastFrameElapsedGameTime);
+                _gameTime.SetTotalGameTime(_totalGameTime);
+                _gameTime.SetIsRunningSlowly(false);
                 Update(_gameTime);
                 // TODO: suppress draw
             }
@@ -89,9 +90,9 @@ namespace InjectedXna
         {
             try
             {
-                _gameTime.TotalGameTime = _totalGameTime;
-                _gameTime.ElapsedGameTime = _lastFrameElapsedGameTime;
-                _gameTime.IsRunningSlowly = false; // TODO - currently don't use the IsRunningSlowly stuff
+                _gameTime.SetTotalGameTime(_totalGameTime);
+                _gameTime.SetElapsedGameTime(_lastFrameElapsedGameTime);
+                _gameTime.SetIsRunningSlowly(false);
                 Draw(_gameTime);
             }
             finally
@@ -104,9 +105,9 @@ namespace InjectedXna
         {
             Initialize();
             BeginRun();
-            _gameTime.ElapsedGameTime = TimeSpan.Zero;
-            _gameTime.TotalGameTime = _totalGameTime;
-            _gameTime.IsRunningSlowly = false;
+            _gameTime.SetElapsedGameTime(TimeSpan.Zero);
+            _gameTime.SetTotalGameTime(_totalGameTime);
+            _gameTime.SetIsRunningSlowly(false);
             Update(_gameTime);
             InjectedGraphicsDeviceManager.EndScene -= EndSceneFirstRun;
             InjectedGraphicsDeviceManager.EndScene += EndScene;

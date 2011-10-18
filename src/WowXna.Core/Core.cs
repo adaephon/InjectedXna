@@ -23,11 +23,7 @@ namespace WowXna
 
         protected override void Draw(GameTime gameTime)
         {
-            float time;
-            if (gameTime is InjectedGameTime)
-                time = (float) (gameTime as InjectedGameTime).TotalGameTime.TotalSeconds;
-            else
-                time = (float)gameTime.TotalGameTime.TotalSeconds;
+            float time = (float) gameTime.TotalGameTime.TotalSeconds;
 
             float yaw = time * 0.4f;
             float pitch = time * 0.7f;
