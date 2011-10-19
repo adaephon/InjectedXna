@@ -70,14 +70,6 @@ namespace Primitives3D
         {
             Content.RootDirectory = "Content";
             graphics = new GraphicsDeviceManager(this);
-
-#if WINDOWS_PHONE
-            TargetElapsedTime = TimeSpan.FromTicks(333333);
-
-            graphics.PreferredBackBufferWidth = 480;
-            graphics.PreferredBackBufferHeight = 800;
-            graphics.IsFullScreen = true;
-#endif
         }
 
 
@@ -177,7 +169,6 @@ namespace Primitives3D
 
         #region Handle Input
 
-
         /// <summary>
         /// Handles input for quitting or changing settings.
         /// </summary>
@@ -187,11 +178,7 @@ namespace Primitives3D
             lastGamePadState = currentGamePadState;
             lastMouseState = currentMouseState;
 
-#if WINDOWS_PHONE
-            currentKeyboardState = new KeyboardState();
-#else
             currentKeyboardState = Keyboard.GetState();
-#endif
             currentGamePadState = GamePad.GetState(PlayerIndex.One);
             currentMouseState = Mouse.GetState();
 
