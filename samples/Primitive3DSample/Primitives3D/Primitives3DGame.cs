@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -87,7 +88,7 @@ namespace Primitives3D
         public Primitives3DGame()
         {
 #if INJECTED
-            Content.RootDirectory = @"D:\Projects\wow-xna\samples\Primitive3DSample\Primitives3D\bin\x86\Debug\Content";
+            Content.RootDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Content");
             graphics = new InjectedGraphicsDeviceManager(this);
 #else
             Content.RootDirectory = "Content";
@@ -101,6 +102,8 @@ namespace Primitives3D
         /// </summary>
         protected override void LoadContent()
         {
+            base.LoadContent();
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
             spriteFont = Content.Load<SpriteFont>("hudfont");
 
@@ -150,7 +153,7 @@ namespace Primitives3D
             }
             else
             {
-                GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                //GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             }
 
             // Create camera matrices, making the object spin.
@@ -175,7 +178,7 @@ namespace Primitives3D
             currentPrimitive.Draw(world, view, projection, color);
 
             // Reset the fill mode renderstate.
-            GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            //GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Draw overlay text.
             string text = "A or tap top of screen = Change primitive\n" +

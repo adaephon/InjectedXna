@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Xna.Framework;
@@ -18,6 +19,7 @@ namespace InjectedXna
         private StateBlock _renderStateBlock;
         private readonly InjectedGameClock _clock;
         private TimeSpan _lastFrameElapsedGameTime;
+        private RasterizerState _defaultState;
 
         public InjectedGame()
         {
@@ -93,6 +95,10 @@ namespace InjectedXna
                 _gameTime.SetTotalGameTime(_totalGameTime);
                 _gameTime.SetElapsedGameTime(_lastFrameElapsedGameTime);
                 _gameTime.SetIsRunningSlowly(false);
+                
+                if (_defaultState != null)
+                    GraphicsDevice.RasterizerState = _defaultState;
+
                 Draw(_gameTime);
             }
             finally
@@ -203,6 +209,13 @@ namespace InjectedXna
 
         protected virtual void LoadContent()
         {
+            _defaultState = new RasterizerState
+                                {
+                                    FillMode = FillMode.Solid,
+                                    CullMode = CullMode.CullCounterClockwiseFace,
+                                    MultiSampleAntiAlias = true,
+                                    Name = "Default test",
+                                };
         }
 
         protected virtual void UnloadContent()
