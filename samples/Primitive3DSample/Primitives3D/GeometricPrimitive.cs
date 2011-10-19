@@ -1,9 +1,20 @@
+﻿#region File Description
+//-----------------------------------------------------------------------------
+// GeometricPrimitive.cs
+//
+// Microsoft XNA Community Game Platform
+// Copyright (C) Microsoft Corporation. All rights reserved.
+//-----------------------------------------------------------------------------
+#endregion
+
+#region Using Statements
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+#endregion
 
-namespace WowXna
+namespace Primitives3D
 {
     /// <summary>
     /// Base class for simple geometric primitive models. This provides a vertex
@@ -93,8 +104,7 @@ namespace WowXna
             // Create a BasicEffect, which will be used to render the primitive.
             basicEffect = new BasicEffect(graphicsDevice);
 
-            basicEffect.EnableDefaultLighting();
-            basicEffect.PreferPerPixelLighting = true;
+            basicEffect.EnableDefaultLighting();            
         }
 
 
@@ -154,9 +164,7 @@ namespace WowXna
             // Set our vertex declaration, vertex buffer, and index buffer.
             graphicsDevice.SetVertexBuffer(vertexBuffer);
 
-            graphicsDevice.Indices = indexBuffer;
-
-            //Core.LogObjectVerbose(effect);
+            graphicsDevice.Indices = indexBuffer;            
 
 
             foreach (EffectPass effectPass in effect.CurrentTechnique.Passes)
@@ -189,7 +197,7 @@ namespace WowXna
             basicEffect.Alpha = color.A / 255.0f;
 
             GraphicsDevice device = basicEffect.GraphicsDevice;
-            device.DepthStencilState = DepthStencilState.Default; ;
+            device.DepthStencilState = DepthStencilState.Default;
 
             if (color.A < 255)
             {

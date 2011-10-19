@@ -1,8 +1,22 @@
+﻿#region File Description
+//-----------------------------------------------------------------------------
+// CubePrimitive.cs
+//
+// Microsoft XNA Community Game Platform
+// Copyright (C) Microsoft Corporation. All rights reserved.
+//-----------------------------------------------------------------------------
+#endregion
+
+#region Using Statements
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+#endregion
 
-namespace WowXna
+namespace Primitives3D
 {
+    /// <summary>
+    /// Geometric primitive class for drawing cubes.
+    /// </summary>
     public class CubePrimitive : GeometricPrimitive
     {
         /// <summary>
