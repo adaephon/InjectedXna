@@ -60,6 +60,10 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\..\libs\Meanas.dll">
+      <Link>Meanas.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -69,6 +73,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Extemory, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\libs\Extemory.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
@@ -91,6 +99,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\InjectedXna\InjectedXna.csproj">
+      <Project>{53BF15D7-7D40-4E2B-B2D8-B64722F90647}</Project>
+      <Name>InjectedXna</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Primitives3DContent\Primitives3DContent.contentproj">
       <Name>Primitives3DContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>

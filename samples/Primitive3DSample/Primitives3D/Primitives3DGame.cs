@@ -1,3 +1,5 @@
+#define INJECTED
+
 #region File Description
 //-----------------------------------------------------------------------------
 // Primitives3DGame.cs
@@ -10,6 +12,13 @@
 #region Using Statements
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
+using Extemory;
+using Extemory.CustomMarshalling;
+using InjectedXna;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -21,11 +30,20 @@ namespace Primitives3D
     /// This sample shows how to draw 3D geometric primitives
     /// such as cubes, spheres, and cylinders.
     /// </summary>
-    public class Primitives3DGame : Microsoft.Xna.Framework.Game
+    public class Primitives3DGame : 
+#if INJECTED
+        InjectedGame
+#else
+        Game
+#endif
     {
         #region Fields
 
+#if INJECTED
+        InjectedGraphicsDeviceManager graphics;
+#else
         GraphicsDeviceManager graphics;
+#endif
 
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
@@ -68,8 +86,13 @@ namespace Primitives3D
 
         public Primitives3DGame()
         {
+#if INJECTED
+            Content.RootDirectory = @"D:\Projects\wow-xna\samples\Primitive3DSample\Primitives3D\bin\x86\Debug\Content";
+            graphics = new InjectedGraphicsDeviceManager(this);
+#else
             Content.RootDirectory = "Content";
             graphics = new GraphicsDeviceManager(this);
+#endif
         }
 
 
@@ -117,7 +140,9 @@ namespace Primitives3D
         /// </summary>
         protected override void Draw(GameTime gameTime)
         {
+#if !INJECTED
             GraphicsDevice.Clear(Color.CornflowerBlue);
+#endif
 
             if (isWireframe)
             {
@@ -182,11 +207,13 @@ namespace Primitives3D
             currentGamePadState = GamePad.GetState(PlayerIndex.One);
             currentMouseState = Mouse.GetState();
 
+#if !INJECTED
             // Check for exit.
             if (IsPressed(Keys.Escape, Buttons.Back))
             {
                 Exit();
             }
+#endif
 
             // Change primitive?
             Viewport viewport = GraphicsDevice.Viewport;
@@ -235,6 +262,24 @@ namespace Primitives3D
         }
 
         #endregion
+
+        #region Static
+#if INJECTED
+        public static void Launch()
+        {
+            //Debugger.Launch();
+            InjectedGraphicsDeviceManager.HookGraphicsDeviceCreation();
+            InjectedGraphicsDeviceManager.XnaDeviceCreated += LaunchCoreAsync;
+        }
+
+        private static void LaunchCoreAsync(object sender, EventArgs e)
+        {
+            new Thread(() => new Primitives3DGame().Run()) { IsBackground = true }.Start();
+            InjectedGraphicsDeviceManager.XnaDeviceCreated -= LaunchCoreAsync;
+        }
+#endif 
+
+	#endregion
     }
 
 
@@ -245,13 +290,71 @@ namespace Primitives3D
     /// </summary>
     static class Program
     {
+        [StructLayout(LayoutKind.Sequential)]
+        public struct CLRAssemblyInfo
+        {
+            [CustomMarshalAs(CustomUnmanagedType.LPWStr)]
+            public string AssemblyPath;
+            [CustomMarshalAs(CustomUnmanagedType.LPWStr)]
+            public string TypeName;
+            [CustomMarshalAs(CustomUnmanagedType.LPWStr)]
+            public string MethodName;
+            [CustomMarshalAs(CustomUnmanagedType.LPWStr)]
+            public string Argument;
+        }
+
         static void Main()
         {
+#if INJECTED
+            try
+            {
+                var info = new CLRAssemblyInfo
+                {
+                    Argument = string.Empty,
+                    AssemblyPath = Assembly.GetExecutingAssembly().Location,
+                    TypeName = "Primitives3D.Program",
+                    MethodName = "DllMain"
+                };
+
+                var proc = new ProcessStartInfo(@"D:\Games\World of Warcraft\wow.exe").CreateProcessSuspended();
+                var clrLauncher = proc.InjectLibrary("Meanas.dll");
+
+                var hr = clrLauncher.CallExport("HostCLR");
+                if (hr.ToInt32() != 0)
+                    throw new Exception(string.Format("HostClr exited with value {0:X8}", hr.ToInt32()));
+
+                hr = clrLauncher.CallExport("ExecuteInHostedCLR", info);
+                if (hr.ToInt32() != 0)
+                    throw new Exception(string.Format("ExecuteInHostedCLR exited with value {0:X8}", hr.ToInt32()));
+
+                proc.Resume();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+#else
             using (Primitives3DGame game = new Primitives3DGame())
             {
                 game.Run();
             }
+#endif
         }
+
+#if INJECTED
+        public static int DllMain(string arg)
+        {
+            try
+            {
+                Primitives3DGame.Launch();
+            }
+            catch (Exception)
+            {
+                return 0xDEAD;
+            }
+            return 0;
+        }
+#endif
     }
 
     #endregion
