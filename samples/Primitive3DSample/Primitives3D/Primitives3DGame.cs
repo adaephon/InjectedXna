@@ -1,4 +1,4 @@
-#define INJECTED
+//#define INJECTED
 
 #region File Description
 //-----------------------------------------------------------------------------
@@ -93,6 +93,7 @@ namespace Primitives3D
 #else
             Content.RootDirectory = "Content";
             graphics = new GraphicsDeviceManager(this);
+            IsMouseVisible = true;
 #endif
         }
 
