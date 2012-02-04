@@ -53,7 +53,7 @@ namespace InjectedXna
 
         private static IntPtr Direct3DCreate9Handler(uint sdkVersion)
         {
-            var pDirect3D9 = (IntPtr) _d3DCreateDetour.CallOriginal(sdkVersion);
+            var pDirect3D9 = _d3DCreateDetour.CallOriginal(sdkVersion);
             if (_iDirect3D9 == IntPtr.Zero)
             {
                 // store the pointer and detour the CreateDevice function
@@ -106,7 +106,7 @@ namespace InjectedXna
                 catch (Exception)
                 {
                     // If we get an exception trying to create the XNA device, just call the original method and pass out the return
-                    ret = (uint)_createDeviceDetour.CallOriginal(
+                    ret = _createDeviceDetour.CallOriginal(
                         thisPtr, adapter, deviceType, hFocusWindow, 
                         behaviorFlags, pPresentationParameters, ppReturnedDeviceInterface);
                 }
@@ -119,7 +119,7 @@ namespace InjectedXna
                 pp.Flags |= 0x1;
                 Marshal.StructureToPtr(pp, pPresentationParameters, true);
 
-                ret = (uint) _createDeviceDetour.CallOriginal(
+                ret = _createDeviceDetour.CallOriginal(
                     thisPtr, adapter, deviceType, hFocusWindow,
                     _preservedBehaviorFlags, pPresentationParameters, ppReturnedDeviceInterface);
             }
@@ -140,14 +140,14 @@ namespace InjectedXna
             if (endScene != null)
                 endScene(null, new EndSceneEventArgs(pDevice));
 
-            return (IntPtr) _endSceneDetour.CallOriginal(pDevice);
+            return _endSceneDetour.CallOriginal(pDevice);
         }
 
         private static IntPtr ResetHandler(IntPtr pDevice, IntPtr pPresentationParameters)
         {
             // TODO
 
-            return (IntPtr) _resetDetour.CallOriginal(pDevice, pPresentationParameters);
+            return _resetDetour.CallOriginal(pDevice, pPresentationParameters);
         }
 
         #endregion

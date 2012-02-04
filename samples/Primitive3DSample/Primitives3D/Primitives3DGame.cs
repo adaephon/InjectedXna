@@ -1,4 +1,4 @@
-//#define INJECTED
+#define INJECTED
 
 #region File Description
 //-----------------------------------------------------------------------------
@@ -271,7 +271,7 @@ namespace Primitives3D
 #if INJECTED
         public static void Launch()
         {
-            //Debugger.Launch();
+            Debugger.Launch();
             InjectedGraphicsDeviceManager.HookGraphicsDeviceCreation();
             InjectedGraphicsDeviceManager.XnaDeviceCreated += LaunchCoreAsync;
         }
@@ -320,7 +320,7 @@ namespace Primitives3D
                     MethodName = "DllMain"
                 };
 
-                var proc = new ProcessStartInfo(@"D:\Games\World of Warcraft\wow.exe").CreateProcessSuspended();
+                var proc = new ProcessStartInfo(@"C:\Games\World of Warcraft\wow.exe").CreateProcessSuspended();
                 var clrLauncher = proc.InjectLibrary("Meanas.dll");
 
                 var hr = clrLauncher.CallExport("HostCLR");
